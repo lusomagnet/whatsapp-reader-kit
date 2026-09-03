@@ -4,14 +4,14 @@ name: Claude Audit
 # NO crear issue si el repo está sano, y comentar en el issue existente en vez
 # de abrir uno nuevo. Sin eso, 22 repos generan 22 issues basura al mes.
 #
-# 0 7 * * 6 lo sustituye rollout.sh por repo (semanal en públicos, mensual
+# 0 6 18 * * lo sustituye rollout.sh por repo (semanal en públicos, mensual
 # escalonado en privados) para no disparar 22 runs a la vez.
 # Fuente de verdad:
 #   LusoMagnet/05-tecnologia/claude-gh-workflows/claude-audit.yml
 
 on:
   schedule:
-    - cron: "0 7 * * 6"
+    - cron: "0 6 18 * *"
   workflow_dispatch:
 
 concurrency:
