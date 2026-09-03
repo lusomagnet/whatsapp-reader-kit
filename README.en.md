@@ -30,7 +30,7 @@ No command in this CLI sends, reacts, deletes or marks as read. To be precise, t
 ## Install
 
 ```bash
-git clone https://github.com/elchamoluso/whatsapp-reader-kit.git && cd whatsapp-reader-kit
+git clone https://github.com/lusomagnet/whatsapp-reader-kit.git && cd whatsapp-reader-kit
 bash install.sh          # npm deps + optional venv + skill + PATH link
 whatsapp-reader login    # human step: scan the QR from your phone (once)
 whatsapp-reader status

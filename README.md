@@ -47,7 +47,7 @@ Ninguna orden de esta CLI envía, reacciona, borra ni marca como leído. Dicho e
 ## Instalación
 
 ```bash
-git clone https://github.com/elchamoluso/whatsapp-reader-kit.git && cd whatsapp-reader-kit
+git clone https://github.com/lusomagnet/whatsapp-reader-kit.git && cd whatsapp-reader-kit
 bash install.sh          # deps npm + venv opcional + skill + enlace en PATH
 whatsapp-reader login    # paso humano: escanea el QR desde tu teléfono (una vez)
 whatsapp-reader status
