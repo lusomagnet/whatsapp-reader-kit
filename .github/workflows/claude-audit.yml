@@ -1,0 +1,75 @@
+name: Claude Audit
+
+# Auditoría desatendida por cron. El guardrail importante está en el prompt:
+# NO crear issue si el repo está sano, y comentar en el issue existente en vez
+# de abrir uno nuevo. Sin eso, 22 repos generan 22 issues basura al mes.
+#
+# 0 7 * * 6 lo sustituye rollout.sh por repo (semanal en públicos, mensual
+# escalonado en privados) para no disparar 22 runs a la vez.
+# Fuente de verdad:
+#   LusoMagnet/05-tecnologia/claude-gh-workflows/claude-audit.yml
+
+on:
+  schedule:
+    - cron: "0 7 * * 6"
+  workflow_dispatch:
+
+concurrency:
+  group: claude-audit-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Claude audit
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Auditoría periódica de ${{ github.repository }}. Responde en español.
+            Explora con Read/Grep/Glob, no con shell: es más rápido y no gasta turnos.
+
+            PASO 1 — antes de escribir nada, mira el estado anterior:
+            `gh issue list --label claude-audit --state open --json number,title,body`
+            (la etiqueta `claude-audit` ya existe en el repo; no la crees).
+
+            PASO 2 — busca SOLO cosas accionables:
+            - Dependencias vulnerables o abandonadas. Si hay `package.json` usa
+              `npm audit`; si hay `requirements.txt`/`pyproject.toml` usa `pip-audit`.
+              Si no hay manifiesto de dependencias, SÁLTATE este apartado sin más.
+            - Secretos o credenciales commiteadas.
+            - Deuda técnica que ya esté rompiendo algo, no la que "podría".
+
+            No inventes versiones ni CVEs que no hayas leído en un fichero real.
+
+            PASO 3 — decide:
+            a) Repo sano o solo hallazgos cosméticos -> NO hagas nada. Ni issue ni
+               comentario. Dilo en tu respuesta final y termina. Este es el
+               resultado esperado la mayoría de los meses.
+            b) Hallazgos que ya están en un issue abierto con label `claude-audit`
+               -> comenta ahí solo si hay algo NUEVO; si no, no hagas nada.
+            c) Hallazgos nuevos y accionables -> UN solo issue con label
+               `claude-audit`: por hallazgo, qué es, dónde (ruta:línea) y qué hacer.
+
+            No abras un issue por hallazgo, ni uno para decir que todo está bien.
+            El silencio es una salida válida y preferible.
+          # max-turns 40: agy-plugin-cc (1 MB) consumió 28 turnos en el piloto, y hay
+          # repos de 50-68 MB. Pasarse del tope = run fallido y tokens tirados.
+          claude_args: |
+            --max-turns 40
+            --model claude-sonnet-5
+            --allowedTools "Read,Grep,Glob,Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(wc:*),Bash(find:*),Bash(jq:*),Bash(git log:*),Bash(git diff:*),Bash(git grep:*),Bash(git ls-files:*),Bash(npm:*),Bash(pip:*),Bash(pip3:*),Bash(pip-audit:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
