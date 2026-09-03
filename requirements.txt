@@ -1,0 +1,7 @@
+# Mitad Python del kit: solo se necesita para --transcribe.
+# Instalación:  python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
+#
+# faster-whisper arrastra ctranslate2, onnxruntime, av, numpy, tokenizers y
+# huggingface-hub. La primera transcripción DESCARGA el modelo desde huggingface.co
+# (~150 MB para "base") y lo cachea en ~/.cache/huggingface.
+faster-whisper>=1.1,<2

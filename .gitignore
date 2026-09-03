@@ -1,0 +1,42 @@
+# Entornos — reinstalables, NUNCA al repo (juntos pesan ~494 MB)
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Sesión de WhatsApp Web = credencial de dispositivo vinculado.
+# Vive en ~/.whatsapp-reader/session — nunca dentro del proyecto.
+.whatsapp-reader/
+session/
+**/Default/
+**/IndexedDB/
+**/Local Storage/
+**/Session Storage/
+Cookies*
+Local State
+
+# Corpus extraído = datos personales de TERCEROS. Nunca al repo.
+whatsapp-data/
+corpus/
+data/
+chats/
+media/
+*.jsonl
+index.md
+
+# Secretos / entorno
+.env
+.env.*
+*.token
+*.pem
+*.key
+.npmrc
+.netrc
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

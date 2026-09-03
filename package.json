@@ -1,0 +1,25 @@
+{
+  "name": "whatsapp-reader-kit",
+  "version": "1.0.0",
+  "description": "Extractor de solo lectura de WhatsApp Web a corpus estructurado (jsonl, markdown, media, transcripción) para agentes de IA. Incluye skill de Claude Code.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "bin": {
+    "whatsapp-reader": "./bin/whatsapp-reader.js"
+  },
+  "files": ["bin/", "src/", "skills/", "requirements.txt", "README.md", "README.en.md", "LICENSE"],
+  "scripts": {
+    "start": "node bin/whatsapp-reader.js",
+    "status": "node bin/whatsapp-reader.js status"
+  },
+  "dependencies": {
+    "@wppconnect/wa-js": "^4.6.0",
+    "commander": "^12.1.0",
+    "puppeteer-core": "^23.1.0",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "repository": { "type": "git", "url": "git+https://github.com/elchamoluso/whatsapp-reader-kit.git" },
+  "bugs": { "url": "https://github.com/elchamoluso/whatsapp-reader-kit/issues" },
+  "author": "Jesús Manuel Ferreira Andara",
+  "license": "MIT"
+}
